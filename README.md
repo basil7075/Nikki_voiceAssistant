@@ -38,4 +38,3 @@ A conversational voice assistant with an interactive web UI built with FastAPI, 
 - Hold the mic button to speak
 - Release to send
 - Say **"shut down"** to exit
-```
