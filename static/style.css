@@ -1,0 +1,219 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --bg: #080b10;
+    --surface: #0f1318;
+    --accent: #4fc3f7;
+    --accent-dim: #1a3a4a;
+    --text: #e8edf2;
+    --text-muted: #4a5568;
+    --nikki: #4fc3f7;
+    --user: #a0aec0;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 480px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.5rem 1.5rem;
+}
+
+/* header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+.name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+}
+.status {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+}
+
+/* orb */
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+}
+
+.orb-wrapper {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.orb {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.orb-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #1a5f7a, #080b10);
+    box-shadow:
+        0 0 30px #4fc3f7,
+        0 0 60px rgba(79, 195, 247, 0.3),
+        inset 0 0 20px rgba(0,0,0,0.5);
+    transition: box-shadow 0.6s ease, background 0.6s ease;
+}
+
+.orb-ring {
+    position: absolute;
+    width: 145px;
+    height: 145px;
+    border-radius: 50%;
+    border: 1px solid rgba(79, 195, 247, 0.25);
+    animation: rotate 8s linear infinite;
+    transition: border-color 0.6s ease;
+}
+.ring2 {
+    width: 170px;
+    height: 170px;
+    border-color: rgba(79, 195, 247, 0.12);
+    animation: rotate 14s linear infinite reverse;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+/* orb states */
+.orb.listening .orb-inner {
+    animation: pulse-listen 1s ease-in-out infinite;
+}
+.orb.speaking .orb-inner {
+    animation: pulse-speak 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-listen {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.08); }
+}
+@keyframes pulse-speak {
+    from { transform: scale(1); }
+    to   { transform: scale(1.12); }
+}
+
+/* mic */
+.mic-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.mic-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 1px solid var(--accent-dim);
+    background: var(--surface);
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.mic-btn svg { width: 22px; height: 22px; }
+.mic-btn:not(:disabled):hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+.mic-btn.active {
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 20px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.mic-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.mic-hint {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+/* transcript */
+.transcript {
+    height: 180px;
+    overflow-y: auto;
+    border-top: 1px solid #1a2030;
+    padding-top: 1rem;
+    scrollbar-width: none;
+}
+.transcript::-webkit-scrollbar { display: none; }
+
+.transcript-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.message {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    animation: fadeSlide 0.3s ease;
+}
+@keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.message .sender {
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+.message.nikki .sender { color: var(--nikki); }
+.message.user  .sender { color: var(--user); }
+
+.message .text {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: var(--text);
+    font-weight: 300;
+}
+.message.user .text { color: var(--text-muted); }
